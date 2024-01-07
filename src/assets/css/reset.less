@@ -1,0 +1,58 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 0;
+  margin: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/*滚动条样式*/
+div::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 8px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 12px;
+  float: right;
+}
+
+div::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px !important;
+  background: rgba(151, 168, 190, .3) !important;
+}
+
+div::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  border-radius: 0;
+}
+
+div {
+  /*三角箭头的颜色*/
+  scrollbar-arrow-color: #d4dbe6;
+  /*滚动条滑块按钮的颜色*/
+  scrollbar-face-color: #d4dbe6;
+  /*滚动条整体颜色*/
+  scrollbar-highlight-color: #d4dbe6;
+  /*滚动条阴影*/
+  scrollbar-shadow-color: #fff;
+  /*滚动条轨道颜色*/
+  scrollbar-track-color: #fff;
+}
