@@ -16,12 +16,12 @@
         </div>
       </header-bar>
       <div class="tag-nav-wrap">
-        <tag-nav :List="userRouteData.tagNavList" @input="handleTagClick" @on-close="handleTagClose" />
+        <tag-nav :List="menuStore.tagNavList" @input="handleTagClick" @on-close="handleTagClose" />
       </div>
       <div class="content-theme">
         <router-view v-slot="{ Component, route }">
           <transition name="fade-slide" mode="out-in" appear>
-            <keep-alive :include="userRouteData.aliveCachesList">
+            <keep-alive :include="menuStore.aliveCachesList">
               <component :is="Component" :key="route.fullPath" />
             </keep-alive>
           </transition>
@@ -36,23 +36,24 @@ import { useRoute, useRouter, RouteLocationNormalized, RouteLocationMatched } fr
 import Sider from './components/sider/index.vue'
 import headerBar from './components/headerBar/index.vue'
 import tagNav from './components/tagNav/index.vue'
-import { useRouteStore } from '@/store/module/routeData'
-import { useUserStore } from '@/store/module/user';
+import { useMenuStore } from '@/store/module/menuStore'
+import { useUserStore } from '@/store/module/userStore';
 import { LOGIN_ROUTE_NAME } from '@/settings'
 import { getBreadCrumbList, getHomeRoute, getRawRoute } from '@/libs/routeMethod'
 
 const $route = useRoute()
 const $router = useRouter()
 const homeRoute = getHomeRoute($router.getRoutes())
-const userRouteData = useRouteStore()
+const menuStore = useMenuStore()
 // slider
-const menuList = userRouteData.menuList;
+const menuList = menuStore.menuList;
 const collapsed = ref(false)
 // header-bar
 const handleCollpasedChange = (collapse: boolean) => {
   collapsed.value = collapse
 }
 const userStore = useUserStore()
+// 退出登录
 const handleUserAction = (type: string) => {
   if (type === 'login-out') {
     userStore.handleLoginOut().then(() => {
@@ -71,9 +72,9 @@ const handleTagClick = (item: RouteLocationNormalized) => {
 }
 
 const handleTagClose = (type: string, name: string) => {
-  let nextName = userRouteData.getToRouteName(name)
+  let nextName = menuStore.getToRouteName(name)
   let Name = name || $route.name as string
-  userRouteData.delNavTag(type, Name)
+  menuStore.delNavTag(type, Name)
   if (type == 'all') {
     $router.push({
       path: '/'
@@ -89,7 +90,7 @@ const handleTagClose = (type: string, name: string) => {
 const breadcrumbData: Ref<RouteLocationMatched[]> = ref([])
 watch($route, () => {
   breadcrumbData.value = getBreadCrumbList($route.matched, homeRoute)
-  userRouteData.addRouteViewData(getRawRoute($route), homeRoute)
+  menuStore.addRouteViewData(getRawRoute($route), homeRoute)
 }, { immediate: true, deep: false })
 
 </script>

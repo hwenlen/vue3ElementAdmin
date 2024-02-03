@@ -8,27 +8,32 @@ export class webLocalStorage {
   constructor(expire: number = 0) {
     this.expires = expire
   }
-  setItem(key: string, value: string) {
+  setItem(key: string, value: any) {
+    let Item = typeof value === 'string' ? { 'value': JSON.parse(value) } : { 'value': value }
     const data = {
-      ...JSON.parse(value),
+      ...Item,
       expires: this.expires && Date.now() + (this.expires * 1000 * 60 * 60 * 24)
     };
     return _localStorage.setItem(key, JSON.stringify(data));
   }
   getItem(key: string) {
-    const value = _localStorage.getItem(key);
-    if (!value) {
+    const loValue = _localStorage.getItem(key);
+    if (!loValue) {
       return null;
     }
-    const data = JSON.parse(value);
+    const data = JSON.parse(loValue);
     if (this.expires && Date.now() > data.expires) {
       _localStorage.removeItem(key);
       return null;
     }
-    return data;
+    return data.value;
   }
 
   removeItem(key: string) {
-    localStorage.removeItem(key);
+    _localStorage.removeItem(key);
   }
+}
+
+export function LocalStorage(expires?: number) {
+  return new webLocalStorage(expires)
 }

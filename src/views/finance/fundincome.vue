@@ -54,11 +54,9 @@ import { typeModel, tableItemResultModel } from '@/api/list/type'
 const formList = () => ({
   turnover: '',
   type: '',
-  name: '',
-  pageSize: 10,
-  pageNum: 1
+  name: ''
 });
-const formData = reactive(formList());
+const formData = reactive(Object.assign(formList(), { pageSize: 10, pageNum: 1 }));
 const state = reactive({
   typeList: Array<typeModel>(),
   tableData: Array<tableItemResultModel>(),
@@ -90,7 +88,6 @@ const reset = () => {
   Object.assign(formData, formList())
   getList()
 }
-
 onMounted(() => {
   getTypes()
   getList()

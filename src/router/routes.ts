@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/login/login.vue')
   }, {
     path: '/:catchAll(.*)',
-    name: 'error',
+    name: 'Error',
     meta: {
       icon: "location",
       hideInMenu: true,
@@ -38,74 +38,75 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/home/index.vue"),
       }
     ],
-  }, {
-    path: "/finance",
-    meta: {
-      title: '平台财务',
-      icon: "location"
-    },
-    component: Layout,
-    redirect: '/finance/fundincome',
-    children: [{
-      path: "fundincome",
-      name: "fundincome",
-      meta: {
-        icon: "location",
-        title: "资金收入表"
-      },
-      component: () => import("@/views/finance/fundincome.vue"),
-    }, {
-      path: "fundexpend",
-      name: "fundexpend",
-      meta: {
-        icon: "location",
-        title: "资金支出表",
-      },
-      component: () => import("@/views/finance/fundexpend.vue"),
-    }],
-  }, {
-    path: "/personnel",
-    meta: {
-      title: '人员管理',
-      icon: "location"
-    },
-    component: Layout,
-    redirect: '/personnel/member',
-    children: [{
-      path: "member",
-      name: "member",
-      meta: {
-        icon: "location",
-        title: "会员列表",
-      },
-      component: () => import("@/views/member/index.vue"),
-    }]
-  }, {
-    path: "/order",
-    meta: {
-      title: '订单管理',
-      icon: "location"
-    },
-    component: Layout,
-    redirect: '/order/commodity',
-    children: [{
-      path: "commodity",
-      name: "commodity",
-      meta: {
-        icon: "location",
-        title: "商品订单",
-      },
-      component: () => import("@/views/order/commodity.vue"),
-    }, {
-      path: "serve",
-      name: "serve",
-      meta: {
-        icon: "location",
-        title: "服务订单",
-      },
-      component: () => import("@/views/order/serve.vue"),
-    }]
-  }
+  },
+  // {
+  //   path: "/finance",
+  //   meta: {
+  //     title: '平台财务',
+  //     icon: "location"
+  //   },
+  //   component: Layout,
+  //   redirect: '/finance/fundincome',
+  //   children: [{
+  //     path: "fundincome",
+  //     name: "Fundincome",
+  //     meta: {
+  //       icon: "location",
+  //       title: "资金收入表"
+  //     },
+  //     component: () => import("@/views/finance/fundincome.vue"),
+  //   }, {
+  //     path: "fundexpend",
+  //     name: "Fundexpend",
+  //     meta: {
+  //       icon: "location",
+  //       title: "资金支出表",
+  //     },
+  //     component: () => import("@/views/finance/fundexpend.vue"),
+  //   }],
+  // }, {
+  //   path: "/personnel",
+  //   meta: {
+  //     title: '人员管理',
+  //     icon: "location"
+  //   },
+  //   component: Layout,
+  //   redirect: '/personnel/member',
+  //   children: [{
+  //     path: "member",
+  //     name: "Member",
+  //     meta: {
+  //       icon: "location",
+  //       title: "会员列表",
+  //     },
+  //     component: () => import("@/views/personnel/member.vue"),
+  //   }]
+  // }, {
+  //   path: "/order",
+  //   meta: {
+  //     title: '订单管理',
+  //     icon: "location"
+  //   },
+  //   component: Layout,
+  //   redirect: '/order/commodity',
+  //   children: [{
+  //     path: "commodity",
+  //     name: "Commodity",
+  //     meta: {
+  //       icon: "location",
+  //       title: "商品订单",
+  //     },
+  //     component: () => import("@/views/order/commodity.vue"),
+  //   }, {
+  //     path: "serve",
+  //     name: "Serve",
+  //     meta: {
+  //       icon: "location",
+  //       title: "服务订单",
+  //     },
+  //     component: () => import("@/views/order/serve.vue"),
+  //   }]
+  // }
 ]
 
 export default routes

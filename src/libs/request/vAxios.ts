@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { ResponseData } from './types'
+import { useUserStore } from '@/store/module/userStore';
 
 // 定义返回数据类型，继承AxiosResponse，可扩展
 export default class VAxios {
@@ -30,6 +31,11 @@ export default class VAxios {
     this.axiosInstance.interceptors.response.use(function (response) {
       // 对响应数据做点什么
       let { data } = response
+      // 没有权限重新登录
+      if (data.code === 1000) {
+        const userStore = useUserStore()
+        userStore.resetState()
+      }
 
       return data
     }, function (error) {

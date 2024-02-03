@@ -1,21 +1,27 @@
 import { defineStore } from 'pinia'
-import conostantRoutes from '@/router/routes'
 import { RouteLocationNormalized } from 'vue-router'
 import { HOME_ROUTE_NAME } from '@/settings'
+import { RouteResultModel } from '@/types'
 
-export const useRouteStore = defineStore('routeData', {
+export const useMenuStore = defineStore('menuData', {
   state: () => ({
-    tagNavList: Array<RouteLocationNormalized>(),
-    aliveCachesList: Array<string>(),
+    tagNavList: Array<RouteLocationNormalized>(), // 顶部标签栏数据
+    aliveCachesList: Array<string>(), // keepalive缓存
+    menuData: Array<RouteResultModel>()
   }),
   getters: {
-    menuList: () => {
-      return conostantRoutes.filter(item => {
+    // 侧边栏数据
+    menuList: (state) => {
+      return state.menuData.filter(item => {
         return item.meta && !item.meta.hideInMenu
       })
     }
   },
   actions: {
+    setMenuData(payload: RouteResultModel[]) {
+      this.menuData = payload
+    },
+    // 添加tag
     addNavTag(route: RouteLocationNormalized, homeRoute: RouteLocationNormalized) {
       if (this.tagNavList.some((v) => v.name === route.name)) return
 
@@ -27,6 +33,7 @@ export const useRouteStore = defineStore('routeData', {
         this.tagNavList.push(route)
       }
     },
+    // 删除tag
     delNavTag(type: string, name: string) {
       if (type == 'single') {
         this.tagNavList = this.tagNavList.filter((item: RouteLocationNormalized) => item.name !== name)

@@ -30,7 +30,7 @@
 <script lang='ts' setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/store/module/user';
+import { useUserStore } from '@/store/module/userStore';
 import type { FormInstance } from 'element-plus'
 
 const $router = useRouter()
