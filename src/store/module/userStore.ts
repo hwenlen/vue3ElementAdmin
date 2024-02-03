@@ -19,6 +19,11 @@ export const useUserStore = defineStore('user', {
     userRoutes: Array<RouteResultModel>(), // 动态路由
     hasAuth: false // 是否获取了权限
   }),
+  getters: {
+    menuStore: () => {
+      return useMenuStore()
+    }
+  },
   persist: {
     storage: customLocalStorage,
     key: 'userInfo',
@@ -60,6 +65,7 @@ export const useUserStore = defineStore('user', {
         LoginOut().then(res => {
           if (res.code == 200) {
             this.resetState()
+            this.menuStore.tagNavList = []
             resolve(res.message)
           } else {
             reject(res.message)
@@ -72,11 +78,10 @@ export const useUserStore = defineStore('user', {
     // 获取动态路由
     async setUserRoutes() {
       if (this.userId === null) return;
-      const menuStore = useMenuStore()
       const res = await getRoutes({ uid: this.userId })
       const payload = formatRouterTree(res.data || [])
       this.userRoutes = payload
-      menuStore.setMenuData(payload)
+      this.menuStore.setMenuData(payload)
       this.hasAuth = true
     }
   }

@@ -120,7 +120,7 @@ export function generateRouter(userRouters: RouteResultModel[], Layout: RouteCom
     } as RouteRecordRaw
 
     if (item.children && item.children.length > 0) {
-      route.redirect = item.path + '/' + item.children[0].path
+      route.redirect = item.redirect ? item.redirect : undefined
       route.children = generateRouter(item.children, Layout)
     }
     return route

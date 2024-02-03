@@ -18,6 +18,7 @@ export const useMenuStore = defineStore('menuData', {
     }
   },
   actions: {
+    //添加侧边栏数据
     setMenuData(payload: RouteResultModel[]) {
       this.menuData = payload
     },

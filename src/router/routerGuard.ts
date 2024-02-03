@@ -17,29 +17,30 @@ export function createRouterGuard(router: Router) {
     NProgress.start()
     const useStore = useUserStore()
     const token = useStore.token
-    // 添加动态路由
+    // 没有登录，且当前不在登录页
+    if (!token && to.name != LOGIN_ROUTE_NAME) {
+      return next({
+        name: LOGIN_ROUTE_NAME,
+        replace: true
+      })
+    }
+    // 登录了且当前在登录页，跳转首页
+    if (token && to.name == LOGIN_ROUTE_NAME) {
+      return next({
+        name: HOME_ROUTE_NAME,
+        replace: true
+      })
+    }
+    // 动态路由权限
     if (!useStore.hasAuth && token) {
       await useStore.setUserRoutes()
       const newRoutes = generateRouter(useStore.userRoutes, Layout)
       newRoutes.forEach(item => {
         router.addRoute(item)
       })
-      return next(to.fullPath)
+      return next({ path: to.fullPath })
     }
-
-    if (!token && to.name != LOGIN_ROUTE_NAME) {
-      next({
-        name: LOGIN_ROUTE_NAME,
-        replace: true
-      })
-    } else if (token && to.name == LOGIN_ROUTE_NAME) {
-      next({
-        name: HOME_ROUTE_NAME,
-        replace: true
-      })
-    } else {
-      next()
-    }
+    next()
   })
 
   router.afterEach((_to) => {

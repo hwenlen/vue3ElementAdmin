@@ -4,6 +4,7 @@ const routesAdmin = [
     pid: 0,
     name: "Finance",
     path: "/finance",
+    redirect: "/finance/fundincome",
     meta: {
       title: '平台财务',
       icon: "location"
@@ -34,6 +35,7 @@ const routesAdmin = [
     pid: 0,
     name: "Personnel",
     path: "/personnel",
+    redirect: "/personnel/member",
     meta: {
       title: '人员管理',
       icon: "location"
@@ -54,6 +56,7 @@ const routesAdmin = [
     pid: 0,
     name: "Order",
     path: "/order",
+    redirect: "/order/commodity",
     meta: {
       title: '订单管理',
       icon: "location"
@@ -88,6 +91,7 @@ const routesVisitor = [
     pid: 0,
     name: "Finance",
     path: "/finance",
+    redirect: "/finance/fundincome",
     meta: {
       title: '平台财务',
       icon: "location"
@@ -118,6 +122,7 @@ const routesVisitor = [
     pid: 0,
     name: "Order",
     path: "/order",
+    redirect: "/order/commodity",
     meta: {
       title: '订单管理',
       icon: "location"
