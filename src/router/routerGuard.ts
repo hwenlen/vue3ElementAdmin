@@ -33,7 +33,7 @@ export function createRouterGuard(router: Router) {
     }
     // 动态路由权限
     if (!useStore.hasAuth && token) {
-      await useStore.setUserRoutes()
+      await useStore.updateRoutesAction()
       const newRoutes = generateRouter(useStore.userRoutes, Layout)
       newRoutes.forEach(item => {
         router.addRoute(item)

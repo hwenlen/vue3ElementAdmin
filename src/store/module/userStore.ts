@@ -6,7 +6,7 @@ import { ResponseData } from "@/libs/request/types";
 import { USER_LOCAL_EXPIRES } from '@/settings'
 import { formatRouterTree } from '@/libs/routeMethod'
 import { RouteResultModel } from '@/types'
-import { useMenuStore } from '@/store/module/menuStore'
+import { useTagNavStore } from '@/store/module/tagNavStore'
 
 const customLocalStorage = LocalStorage(USER_LOCAL_EXPIRES)
 const { userName, roleName, token, userId } = customLocalStorage.getItem('userInfo') || {}
@@ -17,11 +17,18 @@ export const useUserStore = defineStore('user', {
     userId: userId || null,
     token: token || '',
     userRoutes: Array<RouteResultModel>(), // 动态路由
-    hasAuth: false // 是否获取了权限
+    hasAuth: false, // 是否获取了权限
+    menuData: Array<RouteResultModel>()
   }),
   getters: {
-    menuStore: () => {
-      return useMenuStore()
+    tagNavStore: () => {
+      return useTagNavStore()
+    },
+    // 侧边栏数据
+    menuList: (state) => {
+      return state.menuData.filter(item => {
+        return item.meta && !item.meta.hideInMenu
+      })
     }
   },
   persist: {
@@ -35,6 +42,10 @@ export const useUserStore = defineStore('user', {
       this.roleName = res.data?.roleName;
       this.userId = res.data?.userId;
       this.token = res.data?.token;
+    },
+    //添加侧边栏数据
+    setMenuData(payload: RouteResultModel[]) {
+      this.menuData = payload
     },
     resetState() {
       this.userName = '';
@@ -65,7 +76,7 @@ export const useUserStore = defineStore('user', {
         LoginOut().then(res => {
           if (res.code == 200) {
             this.resetState()
-            this.menuStore.tagNavList = []
+            this.tagNavStore.tagNavReset()
             resolve(res.message)
           } else {
             reject(res.message)
@@ -76,12 +87,12 @@ export const useUserStore = defineStore('user', {
       })
     },
     // 获取动态路由
-    async setUserRoutes() {
+    async updateRoutesAction() {
       if (this.userId === null) return;
       const res = await getRoutes({ uid: this.userId })
       const payload = formatRouterTree(res.data || [])
       this.userRoutes = payload
-      this.menuStore.setMenuData(payload)
+      this.setMenuData(payload)
       this.hasAuth = true
     }
   }

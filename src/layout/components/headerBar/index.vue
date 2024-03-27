@@ -57,7 +57,7 @@ const handleUserAction = (type: string) => {
   width: 100%;
   height: 64px;
   line-height: 64px;
-  background: #FFF;
+  background: var(--el-bg-color);
   padding: 0 20px;
   position: sticky;
   top: 0;

@@ -11,17 +11,19 @@
       <header-bar :collapsed="collapsed" :breadcrumb="breadcrumbData" @handleCollpasedChange="handleCollpasedChange"
         @handleUserAction="handleUserAction">
         <div class="role-box">
-          <span> 账户：{{ userStore.userName == '' ? "未知" : userStore.userName }}</span>
-          <span> 账户角色：{{ userStore.roleName == '' ? "未知" : userStore.roleName }}</span>
+          <span> 账户：{{ userName == '' ? "未知" : userName }}</span>
+          <span> 账户角色：{{ roleName == '' ? "未知" : roleName }}</span>
         </div>
       </header-bar>
       <div class="tag-nav-wrap">
-        <tag-nav :List="menuStore.tagNavList" @input="handleTagClick" @on-close="handleTagClose" />
+        <tag-nav :List="tagNavStore.tagNavList" @input="handleTagClick" @on-close="handleTagClose"
+          @open-setting="openSetting" />
       </div>
+      <settings v-model="isOpenSetting" />
       <div class="content-theme">
         <router-view v-slot="{ Component, route }">
           <transition name="fade-slide" mode="out-in" appear>
-            <keep-alive :include="menuStore.aliveCachesList">
+            <keep-alive :include="tagNavStore.aliveCachesList">
               <component :is="Component" :key="route.fullPath" />
             </keep-alive>
           </transition>
@@ -33,30 +35,31 @@
 <script lang='ts' setup>
 import { ref, Ref, watch } from 'vue'
 import { useRoute, useRouter, RouteLocationNormalized, RouteLocationMatched } from 'vue-router'
-import Sider from './components/sider/index.vue'
-import headerBar from './components/headerBar/index.vue'
-import tagNav from './components/tagNav/index.vue'
-import { useMenuStore } from '@/store/module/menuStore'
+import { Sider, headerBar, tagNav, settings } from './components'
+import { useTagNavStore } from '@/store/module/tagNavStore'
 import { useUserStore } from '@/store/module/userStore';
 import { LOGIN_ROUTE_NAME } from '@/settings'
 import { getBreadCrumbList, getHomeRoute, getRawRoute } from '@/libs/routeMethod'
+import { storeToRefs } from 'pinia'
 
 const $route = useRoute()
 const $router = useRouter()
 const homeRoute = getHomeRoute($router.getRoutes())
-const menuStore = useMenuStore()
+const tagNavStore = useTagNavStore()
+const userStore = useUserStore()
 // slider
-const menuList = menuStore.menuList;
+const menuList = userStore.menuList;
 const collapsed = ref(false)
 // header-bar
 const handleCollpasedChange = (collapse: boolean) => {
   collapsed.value = collapse
 }
-const userStore = useUserStore()
+const handleLoginOut = userStore.handleLoginOut
+const { userName, roleName } = storeToRefs(userStore)
 // 退出登录
 const handleUserAction = (type: string) => {
   if (type === 'login-out') {
-    userStore.handleLoginOut().then(() => {
+    handleLoginOut().then(() => {
       $router.push({
         name: LOGIN_ROUTE_NAME
       })
@@ -72,9 +75,9 @@ const handleTagClick = (item: RouteLocationNormalized) => {
 }
 
 const handleTagClose = (type: string, name: string) => {
-  let nextName = menuStore.getToRouteName(name)
+  let nextName = tagNavStore.getToRouteName(name)
   let Name = name || $route.name as string
-  menuStore.delNavTag(type, Name)
+  tagNavStore.delNavTag(type, Name)
   if (type == 'all') {
     $router.push({
       path: '/'
@@ -90,8 +93,14 @@ const handleTagClose = (type: string, name: string) => {
 const breadcrumbData: Ref<RouteLocationMatched[]> = ref([])
 watch($route, () => {
   breadcrumbData.value = getBreadCrumbList($route.matched, homeRoute)
-  menuStore.addRouteViewData(getRawRoute($route), homeRoute)
+  tagNavStore.addRouteViewData(getRawRoute($route), homeRoute)
 }, { immediate: true, deep: false })
+
+// 打开设置抽屉
+const isOpenSetting = ref(false)
+const openSetting = (open: boolean) => {
+  isOpenSetting.value = open
+}
 
 </script>
 <style scoped lang='less'>
@@ -105,7 +114,7 @@ watch($route, () => {
   min-width: 220px;
   flex-shrink: 0;
   height: 100%;
-  background-color: @menu-dark-bg;
+  background-color: var(--el-menu-bg-color);
   overflow-y: auto;
   overflow-x: hidden;
   transition: all 0.4s;
@@ -128,7 +137,7 @@ watch($route, () => {
   min-width: 1200px;
   flex: 1;
   width: 0;
-  background: #f5f7f9;
+  background: var(--el-bg-color-page);
 }
 
 .role-box {
@@ -139,10 +148,10 @@ watch($route, () => {
   position: sticky;
   top: 64px;
   z-index: 100;
-  background: #f5f7f9;
+  background: var(--el-bg-color-page);
 }
 
 .content-theme {
   padding: 16px;
 }
-</style>
+</style>@/store/module/tagNavStore

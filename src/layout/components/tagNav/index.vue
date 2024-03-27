@@ -1,6 +1,6 @@
 <template>
   <div class="tag-nav">
-    <div class="close-box">
+    <div class="hand-btn close-box">
       <el-dropdown @command="handleTagsOption">
         <el-button text :icon="CircleCloseFilled" />
         <template #dropdown>
@@ -11,10 +11,13 @@
         </template>
       </el-dropdown>
     </div>
-    <div class="btn-arrow left-btn">
+    <div class="hand-btn setting-btn">
+      <el-button text :icon="Setting" @click="openSetting()" />
+    </div>
+    <div class="hand-btn left-btn">
       <el-button text :icon="CaretLeft" @click="handleScroll(240)" />
     </div>
-    <div class="btn-arrow right-btn">
+    <div class="hand-btn right-btn">
       <el-button text :icon="CaretRight" @click="handleScroll(-240)" />
     </div>
     <div class="scroll-outer" ref="scrollOuter" @DOMMouseScroll="handleWheelScroll" @mousewheel="handleWheelScroll">
@@ -35,19 +38,20 @@ import { useRoute, RouteLocationNormalized } from 'vue-router'
 import {
   CaretLeft,
   CaretRight,
-  CircleCloseFilled
+  CircleCloseFilled,
+  Setting
 } from '@element-plus/icons-vue'
 const $route = useRoute()
 
-const Emits = defineEmits(['input', 'on-close']);
-defineProps({
-  List: {
-    type: Array<RouteLocationNormalized>,
-    default() {
-      return []
-    }
+const Emits = defineEmits(['input', 'on-close', 'open-setting']);
+withDefaults(
+  defineProps<{
+    List: Array<RouteLocationNormalized>
+  }>(),
+  {
+    List: () => []
   }
-})
+);
 
 let tagBodyLeft = ref(0)
 let scrollOuter = ref()
@@ -58,9 +62,7 @@ const handleScroll = (offset: number) => {
     tagBodyLeft.value = Math.min(0, tagBodyLeft.value + offset)
   } else {
     if (scrollOuter.value.offsetWidth < scrollBody.value.offsetWidth) {
-      if (tagBodyLeft.value < -(scrollBody.value.offsetWidth - scrollOuter.value.offsetWidth)) {
-        tagBodyLeft.value = tagBodyLeft.value
-      } else {
+      if (tagBodyLeft.value >= -(scrollBody.value.offsetWidth - scrollOuter.value.offsetWidth)) {
         tagBodyLeft.value = Math.max(tagBodyLeft.value + offset, scrollOuter.value.offsetWidth - scrollBody.value.offsetWidth)
       }
     } else {
@@ -96,50 +98,59 @@ const handleTagsOption = (type: string) => {
     Emits('on-close', 'others', '')
   }
 }
+
+// 点击打开设置
+const openSetting = () => {
+  Emits('open-setting', true)
+}
 </script>
 <style scoped lang='less'>
 .tag-nav {
   position: relative;
   height: 40px;
 
-  .close-box {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 32px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
-
-  :deep(.el-button) {
-    height: 40px;
-    padding: 8px 9px;
-    border-radius: 0;
-  }
-
-  .btn-arrow {
+  .hand-btn {
     position: absolute;
     top: 0px;
     bottom: 0;
-    background: #fff;
+    background-color: var(--el-bg-color);
     z-index: 10;
+
+    &.close-box {
+      right: 32px;
+      width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--el-bg-color-page);
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
 
     &.left-btn {
       left: 0;
     }
 
     &.right-btn {
-      right: 32px;
-      border-right: 1px solid #F0F0F0;
+      right: 64px;
+      border-right: 1px solid var(--el-bg-color-page);
+    }
+
+    &.setting-btn {
+      right: 0;
     }
 
     :deep(.ivu-btn-text:focus) {
       box-shadow: none;
     }
+  }
+
+  :deep(.el-button) {
+    height: 40px;
+    padding: 8px 9px;
+    border-radius: 0;
   }
 
   .scroll-outer {
@@ -169,8 +180,8 @@ const handleTagsOption = (type: string) => {
       border-radius: 2px;
 
       &.el-tag--light {
-        background-color: #fff;
-        border-color: #e8eaec;
+        background-color: var(--el-bg-color);
+        border-color: var(--el-color-info-light-8);
         color: #515a6e;
 
         .el-icon {

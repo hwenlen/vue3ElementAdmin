@@ -26,9 +26,20 @@
 </template>
 <script lang='ts' setup>
 import { ref } from 'vue'
+import type { EpPropMergeType } from "element-plus/es/utils/vue/props/types"
 import { useTransition, TransitionPresets } from '@vueuse/core'
 
-const growCardList = [
+interface growCardType {
+  id: number,
+  title: string,
+  value: number,
+  action: string,
+  icon: string,
+  unit: string,
+  tagType: EpPropMergeType<StringConstructor, "success" | "warning" | "info" | "primary" | "danger", unknown> | undefined
+}
+
+const growCardList: growCardType[] = [
   {
     id: 1,
     title: '年订单',
@@ -44,7 +55,7 @@ const growCardList = [
     action: '月',
     icon: '/src/assets/images/home/icon2.png',
     unit: '单',
-    tagType: ''
+    tagType: 'success'
   }, {
     id: 3,
     title: '年收入',

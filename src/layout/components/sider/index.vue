@@ -1,8 +1,9 @@
 <template>
   <div class="slide-menu-wrap">
     <slot></slot>
-    <el-menu router unique-opened :default-active="routeData.path" :collapse="collapsed" active-text-color="#fff"
-      background-color="@menu-dark-bg" text-color="rgba(255,255,255,.7)">
+    <!-- <el-menu router unique-opened :default-active="routeData.path" :collapse="collapsed" active-text-color="#fff"
+      background-color="@menu-dark-bg" text-color="rgba(255,255,255,.7)"> -->
+    <el-menu router unique-opened :default-active="routeData.path" :collapse="collapsed">
       <template v-for="item in menuList" :key="item.name">
         <!-- 有子路由且大于一个 -->
         <template v-if="item.children && item.children.length > 1">
@@ -62,30 +63,10 @@ defineProps({
 <style scoped lang='less'>
 .slide-menu-wrap {
   width: 100%;
-  background-color: @menu-dark-bg;
   height: 100%;
 
   :deep(.el-menu) {
     border-right: none;
-  }
-
-  :deep(.el-sub-menu.is-opened) {
-    .el-sub-menu__title {
-      color: #fff;
-    }
-  }
-
-  :deep(.el-sub-menu__title:hover) {
-    background-color: @menu-dark-bg;
-    color: #fff;
-  }
-
-  :deep(.el-menu-item) {
-    &:hover {
-      background-color: @menu-dark-active-bg;
-      color: #fff;
-    }
-
   }
 
   :deep(.el-menu-item-group) {
@@ -96,7 +77,7 @@ defineProps({
 
 <style lang="less">
 .slide-menu-poper {
-  background: @menu-dark-bg;
+  // background: @menu-dark-bg;
   border: none;
 
   .el-menu-item-group__title {
@@ -104,7 +85,7 @@ defineProps({
   }
 
   .el-menu-item:hover {
-    background: @menu-dark-bg;
+    // background: @menu-dark-bg;
     color: #fff;
   }
 }

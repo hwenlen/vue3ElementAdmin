@@ -3,24 +3,15 @@ import { RouteLocationNormalized } from 'vue-router'
 import { HOME_ROUTE_NAME } from '@/settings'
 import { RouteResultModel } from '@/types'
 
-export const useMenuStore = defineStore('menuData', {
+export const useTagNavStore = defineStore('menuData', {
   state: () => ({
     tagNavList: Array<RouteLocationNormalized>(), // 顶部标签栏数据
     aliveCachesList: Array<string>(), // keepalive缓存
     menuData: Array<RouteResultModel>()
   }),
-  getters: {
-    // 侧边栏数据
-    menuList: (state) => {
-      return state.menuData.filter(item => {
-        return item.meta && !item.meta.hideInMenu
-      })
-    }
-  },
   actions: {
-    //添加侧边栏数据
-    setMenuData(payload: RouteResultModel[]) {
-      this.menuData = payload
+    tagNavReset() {
+      this.tagNavList = []
     },
     // 添加tag
     addNavTag(route: RouteLocationNormalized, homeRoute: RouteLocationNormalized) {
