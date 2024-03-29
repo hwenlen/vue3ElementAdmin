@@ -156,7 +156,7 @@ const openSetting = () => {
   .scroll-outer {
     position: absolute;
     left: 32px;
-    right: 61px;
+    right: 94px;
     top: 0;
     bottom: 0;
     -webkit-box-shadow: 0px 0 3px 2px rgba(100, 100, 100, 0.1) inset;
