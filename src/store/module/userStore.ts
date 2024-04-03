@@ -4,7 +4,7 @@ import { Login, LoginOut, getRoutes } from '@/api/user'
 import { LocalStorage } from '@/libs/storage'
 import { ResponseData } from "@/libs/request/types";
 import { USER_LOCAL_EXPIRES } from '@/settings'
-import { formatRouterTree } from '@/libs/routeMethod'
+import { formatRouterTree, filterMenus } from '@/libs/routeMethod'
 import { RouteResultModel } from '@/types'
 import { useTagNavStore } from '@/store/module/tagNavStore'
 
@@ -26,9 +26,7 @@ export const useUserStore = defineStore('user', {
     },
     // 侧边栏数据
     menuList: (state) => {
-      return state.menuData.filter(item => {
-        return item.meta && !item.meta.hideInMenu
-      })
+      return filterMenus(state.menuData)
     }
   },
   persist: {

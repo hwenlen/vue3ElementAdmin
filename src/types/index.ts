@@ -3,7 +3,7 @@ export interface RouteMetaModel {
   icon: string | undefined,
   title: string | undefined,
   affix?: boolean
-  hadeInTag?: boolean
+  hideInTag?: boolean
 }
 
 export interface RouteResultModel {

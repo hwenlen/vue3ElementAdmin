@@ -16,6 +16,22 @@ export const getHomeRoute = (Routes: RouteRecordNormalized[]) => {
 }
 
 /**
+ * @param {*} Routes router.getRoutes()
+ * @description 筛选menu列表
+ * @return {RouteLocationNormalized} menu列表
+ */
+export const filterMenus = (Routes: RouteResultModel[]) => {
+  const Menus = Routes.filter(item => {
+    if (item.children && item.children.length > 0) {
+      item.children = filterMenus(item.children)
+    }
+
+    return item.meta && !item.meta.hideInMenu
+  })
+  return Menus
+}
+
+/**
  * @param {*} route
  * @description 转换route对象适配tagNav
  * @return {RouteLocationNormalized} route对象信息

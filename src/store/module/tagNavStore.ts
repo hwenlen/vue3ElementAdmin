@@ -20,8 +20,8 @@ export const useTagNavStore = defineStore('menuData', {
       if (!this.tagNavList[0]?.meta?.affix) {
         this.tagNavList = [homeRoute]
       }
-      // hadeInTag: 是否显示在nav上
-      if (route.meta && !route.meta.hadeInTag && !route.meta.affix) {
+      // hideInTag: 是否显示在nav上
+      if (route.meta && !route.meta.hideInTag && !route.meta.affix) {
         this.tagNavList.push(route)
       }
     },
