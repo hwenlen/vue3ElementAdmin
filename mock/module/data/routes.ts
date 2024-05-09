@@ -21,6 +21,18 @@ const routesAdmin = [
     },
     component: "finance/fundincome",
   }, {
+    id: 9,
+    pid: 1,
+    name: "FundincomeDetail",
+    path: "fundincomeDetail",
+    meta: {
+      title: '资金收入表详情',
+      icon: "location",
+      hideInMenu: true,
+      hideInTag: true
+    },
+    component: "finance/fundincomeDetail",
+  }, {
     id: 3,
     pid: 1,
     name: "Fundexpend",

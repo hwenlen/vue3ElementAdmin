@@ -38,18 +38,26 @@
       <el-table-column prop="typeText" label="订单类型" width="100" />
       <el-table-column prop="createTime" label="下单时间" />
       <el-table-column prop="address" label="用户地址" />
+      <el-table-column fixed="right" label="操作" width="120">
+        <template #default="scope">
+          <el-button type="primary" text @click="handleDetail(scope.row)">修改</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <div class="table-pagination">
-      <el-pagination background layout="sizes, prev, pager, next" :total="state.pageTotal" :page-sizes="[10, 20, 50, 100]"
-        @change="pageChange" />
+      <el-pagination background layout="sizes, prev, pager, next" :total="state.pageTotal"
+        :page-sizes="[10, 20, 50, 100]" @change="pageChange" />
     </div>
   </div>
 </template>
-<script lang='ts'setup>
+<script lang='ts' setup>
 import { reactive, onMounted } from 'vue'
 import { getOrderTypes, getFundincomeList } from '@/api/list'
 import { typeModel, tableItemResultModel } from '@/api/list/type'
+import { useRouter } from 'vue-router';
+
+const $router = useRouter()
 
 const formList = () => ({
   turnover: '',
@@ -87,6 +95,16 @@ const pageChange = (currentPage: number, pageSize: number) => {
 const reset = () => {
   Object.assign(formData, formList())
   getList()
+}
+
+const handleDetail = (row: tableItemResultModel) => {
+  console.log(row)
+  $router.push({
+    path: '/finance/fundincomeDetail',
+    query: {
+      id: row.id
+    }
+  })
 }
 onMounted(() => {
   getTypes()
