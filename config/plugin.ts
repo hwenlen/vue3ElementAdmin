@@ -10,9 +10,11 @@ export function createPlugins(env: Record<string, string>, command: "build" | "s
     vue(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
+      // dts: '../auto-imports.d.ts'
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+      // dts: '../components.d.ts'
     }),
     viteMockServe({
       mockPath: 'mock',
